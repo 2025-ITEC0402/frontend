@@ -1,7 +1,6 @@
 'use client';
 
-import { useDarkMode } from '@/src/widgets/theme-toggle/model/store';
-import ThemeToggleButton from '@/src/widgets/theme-toggle/ui/themeToggleButton';
+import { ThemeToggleButton, useDarkMode } from '@/src/widgets/theme-toggle';
 
 export default function Home() {
   const darkMode = useDarkMode();

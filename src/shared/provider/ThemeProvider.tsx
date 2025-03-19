@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDarkMode } from "@/src/widgets/theme-toggle/model/store";
+import { useDarkMode } from "@/src/widgets/theme-toggle";
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const darkMode = useDarkMode();
