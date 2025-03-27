@@ -18,5 +18,5 @@ export default {
       },
     },
   },
-  darkMode: ['class', '[data-mode="dark"]'],
+  darkMode: 'class',
 } satisfies Config;
