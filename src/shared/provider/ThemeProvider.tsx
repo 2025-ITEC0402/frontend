@@ -1,18 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useDarkMode } from "@/src/widgets/theme-toggle";
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const darkMode = useDarkMode();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+    setIsMounted(true);
+  }, []);
 
-  return <>{children}</>;
+  if (!isMounted) {
+    return null;
+  }
+
+  return (
+    <NextThemesProvider attribute='class' defaultTheme='light' enableSystem>
+      {children}
+    </NextThemesProvider>
+  );
 }
