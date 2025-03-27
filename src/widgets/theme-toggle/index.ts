@@ -1,2 +1,2 @@
 export * from './model/store';
-export { default as ThemeToggleButton } from './ui/themeToggleButton';
+export { ThemeToggleButton } from './ui/themeToggleButton';
