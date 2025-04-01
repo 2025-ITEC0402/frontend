@@ -1,6 +1,7 @@
 'use client';
 
 import KakaoLoginImage from '@/public/images/kakao_login_large_wide.png';
+import { getKakaoLoginUrl } from '@/src/shared/lib/OAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -8,10 +9,7 @@ export default function KakaoLoginButton() {
   const router = useRouter();
 
   const handleLogin = () => {
-    const REST_API_KEY = process.env.KAKAO_REST_API_KEY;
-    const REDIRECT_URI = process.env.KAKAO_REDIRECT_URI;
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
+    const kakaoAuthUrl = getKakaoLoginUrl();
     router.push(kakaoAuthUrl);
   };
 
