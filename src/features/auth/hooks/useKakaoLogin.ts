@@ -1,10 +1,12 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
-import { requestKakaoLogin } from '../model/kakaoAuthApi';
+import { useQuery } from '@tanstack/react-query';
+import { requestKakaoLogin } from '../model/requestKakaoLogin';
 
-export const useKakaoLogin = () => {
-  return useMutation({
-    mutationFn: (code: string) => requestKakaoLogin(code),
+export const useKakaoLogin = (code: string) => {
+  return useQuery({
+    queryKey: ['kakaoLogin', code],
+    queryFn: () => requestKakaoLogin(code),
+    enabled: !!code,
   });
 };
