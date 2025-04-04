@@ -21,7 +21,10 @@ export default function Navbar() {
     <nav className='w-full border-b border-dashed border-gray-300 bg-white dark:border-gray-700 dark:bg-[var(--background)]'>
       <div className='mx-auto flex h-16 max-w-7xl items-center justify-between px-4'>
         <div className='flex items-center gap-2'>
-          <Link href='/' className='transition-transform duration-200 ease-in-out hover:scale-110'>
+          <Link
+            href='/main'
+            className='transition-transform duration-200 ease-in-out hover:scale-110'
+          >
             <Image
               src={lightLogo}
               alt='Light Logo'
