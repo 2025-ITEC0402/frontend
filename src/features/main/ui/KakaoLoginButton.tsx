@@ -14,7 +14,7 @@ export default function KakaoLoginButton() {
   };
 
   return (
-    <button onClick={handleLogin}>
+    <button className='cursor-pointer' onClick={handleLogin}>
       <Image src={KakaoLoginImage} alt='카카오 로그인 버튼' width={260} height={60} />
     </button>
   );
