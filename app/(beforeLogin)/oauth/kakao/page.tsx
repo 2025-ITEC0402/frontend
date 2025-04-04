@@ -9,7 +9,8 @@ export default function KakaoRedirectPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get('code');
-  const kakaoLogin = useKakaoLogin();
+
+  const { data, isSuccess, isError, error } = useKakaoLogin(code || '');
 
   useEffect(() => {
     if (!code) {
@@ -18,21 +19,15 @@ export default function KakaoRedirectPage() {
       return;
     }
 
-    if (!kakaoLogin.isPending) {
-      kakaoLogin.mutate(code, {
-        onSuccess: (data) => {
-          localStorage.setItem('accessToken', data.accessToken);
-          localStorage.setItem('refreshToken', data.refreshToken); // 개발 용으로 임시 저장
-          router.replace('/main');
-        },
-        onError: (error) => {
-          console.error('카카오 로그인 실패: ', error);
-          alert('카카오 로그인에 실패했습니다. 잠시 후 다시 시도해주세요.');
-          router.replace('/');
-        },
-      });
+    if (isSuccess && data?.accessToken) {
+      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=3600;`;
+      router.replace('/main');
+    } else if (isError) {
+      console.error('카카오 로그인 실패:', error);
+      alert('로그인에 실패했습니다.');
+      router.replace('/');
     }
-  }, [code]);
+  }, [code, isSuccess, isError, data, error, router]);
 
   return (
     <div className='flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center'>
