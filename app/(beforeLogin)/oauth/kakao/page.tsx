@@ -3,14 +3,26 @@
 import { useKakaoLogin } from '@/src/features/auth/hooks/useKakaoLogin';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function KakaoRedirectPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const hasCalled = useRef(false);
   const code = searchParams.get('code');
 
-  const { mutate: kakaoLogin, data, isSuccess, isError, error } = useKakaoLogin();
+  const { mutate: kakaoLogin } = useKakaoLogin({
+    onSuccess: (data) => {
+      alert('카카오 로그인 성공!');
+      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=3600;`;
+      router.replace('/main');
+    },
+    onError: (error) => {
+      alert('카카오 소셜 로그인에 실패했습니다.');
+      console.error('카카오 로그인 실패:', error);
+      router.replace('/');
+    },
+  });
 
   useEffect(() => {
     if (!code) {
@@ -18,20 +30,12 @@ export default function KakaoRedirectPage() {
       router.replace('/');
       return;
     }
-    kakaoLogin(code);
-  }, [code, kakaoLogin, router]);
-
-  useEffect(() => {
-    if (isSuccess && data?.accessToken) {
-      alert('카카오 로그인 성공!');
-      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=3600;`;
-      router.replace('/main');
-    } else if (isError) {
-      alert('카카오 소셜 로그인에 실패했습니다.');
-      console.error('카카오 로그인 실패:', error);
-      router.replace('/');
+  
+    if (!hasCalled.current) {
+      hasCalled.current = true;
+      kakaoLogin(code);
     }
-  }, [isSuccess, isError, data, error, router]);
+  }, [code, kakaoLogin, router]);
 
   return (
     <div className='flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center'>
