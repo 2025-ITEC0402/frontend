@@ -4,6 +4,7 @@ import { useKakaoLogin } from '@/src/features/auth/hooks/useKakaoLogin';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 export default function KakaoRedirectPage() {
   const router = useRouter();
@@ -13,12 +14,12 @@ export default function KakaoRedirectPage() {
 
   const { mutate: kakaoLogin } = useKakaoLogin({
     onSuccess: (data) => {
-      alert('카카오 로그인 성공!');
+      toast.success('카카오 로그인 성공! 환영합니다.');
       document.cookie = `accessToken=${data.accessToken}; path=/; max-age=3600;`;
       router.replace('/main');
     },
     onError: (error) => {
-      alert('카카오 소셜 로그인에 실패했습니다.');
+      toast.error('카카오 로그인에 실패하였습니다.');
       console.error('카카오 로그인 실패:', error);
       router.replace('/');
     },
@@ -26,11 +27,11 @@ export default function KakaoRedirectPage() {
 
   useEffect(() => {
     if (!code) {
-      alert('카카오로부터 제공된 인가 코드가 없습니다.');
+      toast.error('카카오로부터 인가 코드가 없습니다.');
       router.replace('/');
       return;
     }
-  
+
     if (!hasCalled.current) {
       hasCalled.current = true;
       kakaoLogin(code);
