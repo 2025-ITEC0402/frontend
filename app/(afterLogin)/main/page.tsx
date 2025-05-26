@@ -4,11 +4,10 @@ import { StreakBoard } from '@/src/features/main/ui/StreakBoard';
 import { UserDashboard } from '@/src/features/main/ui/UserDashboard';
 
 const userData = {
-  userName: 'OOO',
+  userName: 'Admin',
   solvedTodayCount: 5,
   totalSolvedCount: 120,
-  currentStreak: 7,
-  learningProgress: 65,
+  currentStreak: 7
 };
 
 export default function AfterLoginHome() {
@@ -20,7 +19,6 @@ export default function AfterLoginHome() {
           solvedTodayCount={userData.solvedTodayCount}
           totalSolvedCount={userData.totalSolvedCount}
           currentStreak={userData.currentStreak}
-          learningProgress={userData.learningProgress}
         />
         <StreakBoard />
         <AITutorChat />
