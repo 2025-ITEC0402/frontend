@@ -40,9 +40,9 @@ export function StreakBoard() {
 
   return (
     <div className='rounded-xl border border-dashed bg-white p-6 dark:border-gray-700 dark:bg-gray-900'>
-      <h3 className='mb-8 text-lg font-semibold text-gray-900 dark:text-white'>스트릭</h3>
+      <h3 className='mb-12 text-lg font-semibold text-gray-900 dark:text-white'>스트릭</h3>
       <div className='w-full overflow-x-auto'>
-        <div className='relative mx-auto flex max-w-4xl min-w-[700px]'>
+        <div className='relative mx-auto flex max-w-6xl min-w-[700px]'>
           <div className='flex h-full min-h-[140px] w-full flex-col items-center justify-center'>
             <CalendarHeatmap
               startDate={startDate}
