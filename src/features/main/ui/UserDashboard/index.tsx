@@ -1,0 +1,66 @@
+'use client';
+
+import { Button } from '@/src/shared/ui/button';
+import { CalendarCheck, LogOut, Target, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { StatCard } from './StatCard';
+
+export interface UserDashboardProps {
+  userName: string;
+  currentStreak: number; // 연속 학습일
+  solvedTodayCount: number; // 오늘 푼 문제 수
+  totalSolvedCount: number; // 총 푼 문제 수
+}
+
+export function UserDashboard({
+  userName,
+  solvedTodayCount,
+  totalSolvedCount,
+  currentStreak,
+}: UserDashboardProps) {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = 'accessToken=; path=/; max-age=0;';
+    toast.success('성공적으로 로그아웃 되었습니다.');
+    router.replace('/');
+  };
+
+  return (
+    <div className='w-full rounded-xl border border-none bg-white p-2 dark:border-gray-700 dark:bg-[var(--background)]'>
+      <div className='flex flex-col gap-4'>
+        <div className='flex items-center justify-between p-4'>
+          <h2 className='text-2xl font-semibold dark:text-white'>{userName} 님, 안녕하세요!</h2>
+          <Button
+            onClick={handleLogout}
+            variant='outline'
+            size='sm'
+            className='gap-1 hover:opacity-80'
+          >
+            <LogOut className='h-4 w-4' />
+            로그아웃
+          </Button>
+        </div>
+
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
+          <StatCard
+            icon={<TrendingUp className='h-6 w-6 text-green-500' />}
+            label='연속 학습'
+            value={`${currentStreak}일`}
+          />
+          <StatCard
+            icon={<CalendarCheck className='h-6 w-6 text-blue-500' />}
+            label='오늘 푼 문제'
+            value={`${solvedTodayCount}개`}
+          />
+          <StatCard
+            icon={<Target className='h-6 w-6 text-purple-500' />}
+            label='총 푼 문제'
+            value={`${totalSolvedCount}개`}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
