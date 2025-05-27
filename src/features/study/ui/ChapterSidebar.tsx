@@ -1,32 +1,30 @@
 'use client';
 
-import { ScrollArea } from '@/src/shared/ui/scroll-area';
-import { Separator } from '@/src/shared/ui/separator';
-import Link from 'next/link';
-import * as React from 'react';
-
-const chapters = Array.from({ length: 25 }).map((_, i) => ({
-  label: `Chapter ${i + 1}`,
-  href: `/study/${i + 1}`,
-}));
+import { chapters } from '@/src/shared/types/chapters';
+import { usePathname, useRouter } from 'next/navigation';
 
 export function ChapterSidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
-    <ScrollArea className='h-180 w-40 rounded-md border'>
-      <div className='p-4 text-center'>
-        <h4 className='mb-6 text-sm leading-none font-medium'>목차</h4>
-        {chapters.map((chapter) => (
-          <React.Fragment key={chapter.label}>
-            <Link
-              href={chapter.href}
-              className='text-muted-foreground hover:text-foreground block text-sm transition-colors'
+    <nav className='bg-muted/40 w-72 rounded-xl border p-4'>
+      <ul className='flex flex-col gap-2'>
+        {chapters.map((ch) => (
+          <li key={ch.chapterId}>
+            <button
+              className={`w-full rounded-lg px-4 py-2 text-left font-semibold transition ${
+                pathname.endsWith(`/study/${ch.chapterId}`)
+                  ? 'bg-primary/10 text-primary'
+                  : 'hover:bg-primary/5 text-gray-700 dark:text-gray-200'
+              }`}
+              onClick={() => router.push(`/study/${ch.chapterId}`)}
             >
-              {chapter.label}
-            </Link>
-            <Separator className='my-2' />
-          </React.Fragment>
+              {ch.label}
+            </button>
+          </li>
         ))}
-      </div>
-    </ScrollArea>
+      </ul>
+    </nav>
   );
 }
