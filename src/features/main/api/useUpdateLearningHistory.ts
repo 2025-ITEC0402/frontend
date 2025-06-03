@@ -5,7 +5,7 @@ const updateLearningHistory = async (): Promise<void> => {
   const token = getCookieValue('accessToken');
   if (!token) throw new Error('No access token found in cookies');
 
-  const res = await fetch('/api/main/learning-history', {
+  const res = await fetch('/api/main/update', {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +13,7 @@ const updateLearningHistory = async (): Promise<void> => {
     },
   });
 
-  if (res.status === 204) return;
+  if (res.ok) return;
 
   throw new Error('Failed to update learning history');
 };
