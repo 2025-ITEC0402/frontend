@@ -1,5 +1,11 @@
 import { ChapterSidebar } from '@/src/features/study/ui/ChapterSidebar';
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
+
+export const metadata: Metadata = {
+  title: 'AI 학습 플랫폼 | 개념 학습',
+  description: '공업수학 주요 개념들을 문장 단위로 학습하고, AI 해설을 통해 이해도를 높이세요.',
+};
 
 export default function StudyLayout({ children }: { children: ReactNode }) {
   return (
