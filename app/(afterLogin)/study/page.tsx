@@ -1,14 +1,11 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
-import { useParams } from 'next/navigation';
 
 export default function ChapterPage() {
-  const params = useParams();
-
   return (
     <div className='flex min-h-screen w-full items-center justify-center'>
-      <Card className='border-muted bg-muted/40 min-h-[200vh] w-full max-w-5xl shadow-md'>
+      <Card className='border-muted bg-muted/40 min-h-[100vh] w-full max-w-5xl shadow-md'>
         <div className='flex h-full flex-col items-center justify-center px-6 py-12'>
           <CardHeader className='w-full items-center'>
             <CardTitle className='text-center text-xl'>
