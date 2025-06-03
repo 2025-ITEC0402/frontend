@@ -8,7 +8,6 @@ interface Problem {
   title: string;
   difficulty: '쉬움' | '보통' | '어려움';
   category: string;
-  solvedCount: number;
 }
 
 const recommendedProblems: Problem[] = [
@@ -17,21 +16,18 @@ const recommendedProblems: Problem[] = [
     title: '미분방정식 기초 문제',
     difficulty: '쉬움',
     category: '미분방정식',
-    solvedCount: 120,
   },
   {
     id: '2',
     title: '라플라스 변환 응용',
     difficulty: '보통',
     category: '라플라스 변환',
-    solvedCount: 85,
   },
   {
     id: '3',
     title: '푸리에 급수 심화',
     difficulty: '어려움',
     category: '푸리에 급수',
-    solvedCount: 45,
   },
 ];
 
@@ -72,8 +68,6 @@ export function ProblemRecommendation() {
                   >
                     {problem.difficulty}
                   </span>
-                  <span>•</span>
-                  <span>{problem.solvedCount}명 해결</span>
                 </div>
               </div>
             </div>
