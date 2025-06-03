@@ -4,6 +4,7 @@ import { Button } from '@/src/shared/ui/button';
 import { Input } from '@/src/shared/ui/input';
 import { Bot, Image, Send, User, X } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
@@ -38,7 +39,10 @@ export function AITutorChat() {
   };
 
   const handleSend = () => {
-    if (!input.trim() && !selectedImage) return;
+    if (!input.trim() && !selectedImage) {
+      toast.warning('이미지 첨부 또는 질문을 입력해 주세요!');
+      return;
+    }
 
     const newMessage: Message = {
       id: Date.now().toString(),
