@@ -6,16 +6,13 @@ import { Tooltip } from 'react-tooltip';
 import { StreakLevelBadge } from './StreakLevelBadge';
 
 export interface StreakData {
-  date: string; // 'YYYY-MM-DD'
+  date: string;
   count: number;
 }
 
-const streakData: StreakData[] = [
-  { date: '2025-05-23', count: 1 },
-  { date: '2025-05-24', count: 2 },
-  { date: '2025-05-25', count: 4 },
-  { date: '2025-05-26', count: 6 },
-];
+interface StreakBoardProps {
+  streakData: StreakData[];
+}
 
 const getClassForValue = (value: StreakData | null) => {
   if (!value || value.count === 0) return 'fill-gray-200 dark:fill-gray-700';
@@ -33,7 +30,7 @@ const tooltipDataAttrs = (value: StreakData | null) => {
   };
 };
 
-export function StreakBoard() {
+export function StreakBoard({ streakData }: StreakBoardProps) {
   const endDate = new Date();
   const startDate = new Date();
   startDate.setFullYear(endDate.getFullYear() - 1);
