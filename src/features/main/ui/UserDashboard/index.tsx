@@ -1,16 +1,17 @@
 'use client';
 
-import { Button } from '@/src/shared/ui/button';
-import { CalendarCheck, LogOut, Target, TrendingUp } from 'lucide-react';
+import { LogoutButton } from '@/src/features/main/ui/UserDashboard/LogoutButton';
+import { RefreshHistoryButton } from '@/src/features/main/ui/UserDashboard/RefreshHistoryButton';
+import { CalendarCheck, Target, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { StatCard } from './StatCard';
 
 export interface UserDashboardProps {
   userName: string;
-  currentStreak: number; // 연속 학습일
-  solvedTodayCount: number; // 오늘 푼 문제 수
-  totalSolvedCount: number; // 총 푼 문제 수
+  currentStreak: number;
+  solvedTodayCount: number;
+  totalSolvedCount: number;
 }
 
 export function UserDashboard({
@@ -32,15 +33,10 @@ export function UserDashboard({
       <div className='flex flex-col gap-4'>
         <div className='flex items-center justify-between p-4'>
           <h2 className='text-2xl font-semibold dark:text-white'>{userName} 님, 안녕하세요!</h2>
-          <Button
-            onClick={handleLogout}
-            variant='outline'
-            size='sm'
-            className='gap-1 hover:opacity-80'
-          >
-            <LogOut className='h-4 w-4' />
-            로그아웃
-          </Button>
+          <div className='flex gap-2'>
+            <RefreshHistoryButton />
+            <LogoutButton />
+          </div>
         </div>
 
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
