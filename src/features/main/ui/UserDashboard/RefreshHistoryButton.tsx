@@ -1,16 +1,21 @@
 'use client';
 
+import { useUpdateLearningHistory } from '@/src/features/main/api/useUpdateLearningHistory';
 import { Button } from '@/src/shared/ui/button';
 import { RefreshCw } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useUpdateLearningHistory } from '@/src/features/main/api/useUpdateLearningHistory';
 
 export function RefreshHistoryButton() {
+  const router = useRouter();
   const { mutate, isPending } = useUpdateLearningHistory();
 
   const handleRefresh = () => {
     mutate(undefined, {
-      onSuccess: () => toast.success('히스토리가 갱신되었습니다!'),
+      onSuccess: () => {
+        toast.success('히스토리가 갱신되었습니다!');
+        router.refresh();
+      },
       onError: () => toast.error('갱신에 실패했습니다.'),
     });
   };
