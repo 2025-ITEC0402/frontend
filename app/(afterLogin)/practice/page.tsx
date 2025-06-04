@@ -3,11 +3,18 @@
 import { useRandomQuestions } from '@/src/features/practice/api/useRandomQuestions';
 import { ProblemSolver } from '@/src/features/practice/ui/ProblemSolver';
 import { Spinner } from '@/src/shared/ui/spinner';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+interface ProblemState {
+  selected: number | null;
+  showAnswer: boolean;
+  timeSpent: number;
+}
 
 export default function PracticePage() {
   const { data, isLoading, isError } = useRandomQuestions();
   const [current, setCurrent] = useState(0);
+  const [problemStates, setProblemStates] = useState<Record<number, ProblemState>>({});
 
   if (isLoading) {
     return (
@@ -40,14 +47,34 @@ export default function PracticePage() {
     );
   }
 
-  const navigateProblem = (direction: 'prev' | 'next') => {
-    setCurrent((prev) => {
-      const newIndex = direction === 'prev' ? prev - 1 : prev + 1;
-      return Math.min(Math.max(newIndex, 0), problems.length - 1);
-    });
-  };
+  const navigateProblem = useCallback(
+    (direction: 'prev' | 'next') => {
+      setCurrent((prev) => {
+        const newIndex = direction === 'prev' ? prev - 1 : prev + 1;
+        return Math.min(Math.max(newIndex, 0), problems.length - 1);
+      });
+    },
+    [problems.length],
+  );
 
-  const progress = ((current + 1) / problems.length) * 100;
+  const progress = problems.length > 0 ? ((current + 1) / problems.length) * 100 : 0;
+
+  // 정답률 계산
+  const correctCount = problems.reduce((acc, p) => {
+    const state = problemStates[p.question_id];
+    if (state?.showAnswer && state.selected === parseInt(p.answer) - 1) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
+
+  const totalCount = problems.reduce((acc, p) => {
+    const state = problemStates[p.question_id];
+    if (state?.showAnswer) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
 
   return (
     <ProblemSolver
@@ -57,6 +84,10 @@ export default function PracticePage() {
       isFirst={current === 0}
       isLast={current === problems.length - 1}
       progress={progress}
+      problemStates={problemStates}
+      setProblemStates={setProblemStates}
+      correctCount={correctCount}
+      totalCount={totalCount}
     />
   );
 }
