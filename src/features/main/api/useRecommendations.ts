@@ -5,6 +5,7 @@ export interface Recommendation {
   chapterName: string;
   chapterNum: string;
   level: string;
+  questionId: number;
 }
 
 export interface RecommendationResponse {
