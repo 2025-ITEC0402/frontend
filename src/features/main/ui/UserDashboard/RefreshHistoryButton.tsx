@@ -1,6 +1,7 @@
 'use client';
 
 import { useUpdateLearningHistory } from '@/src/features/main/api/useUpdateLearningHistory';
+import { queryClient } from '@/src/shared/provider/QueryProvider';
 import { Button } from '@/src/shared/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -13,8 +14,9 @@ export function RefreshHistoryButton() {
   const handleRefresh = () => {
     mutate(undefined, {
       onSuccess: () => {
-        toast.success('히스토리가 갱신되었습니다!');
+        queryClient.invalidateQueries();
         router.refresh();
+        toast.success('히스토리가 갱신되었습니다!');
       },
       onError: () => toast.error('갱신에 실패했습니다.'),
     });
