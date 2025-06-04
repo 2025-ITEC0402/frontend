@@ -12,6 +12,7 @@ interface Props {
   onNext: () => void;
   isFirst: boolean;
   isLast: boolean;
+  hideNavigation?: boolean;
 }
 
 export function ProblemView({
@@ -24,6 +25,7 @@ export function ProblemView({
   onNext,
   isFirst,
   isLast,
+  hideNavigation = false,
 }: Props) {
   return (
     <div className='flex min-h-[700px] flex-col justify-between p-12'>
@@ -39,11 +41,11 @@ export function ProblemView({
               'flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition',
               selected === idx && 'border-primary bg-primary/10',
               showAnswer &&
-                idx === (problem.answer - 1) &&
+                idx === problem.answer - 1 &&
                 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30',
               showAnswer &&
                 selected === idx &&
-                selected !== (problem.answer - 1) &&
+                selected !== problem.answer - 1 &&
                 'border-2 border-red-500 bg-red-50 dark:bg-red-900/30',
             )}
           >
@@ -77,7 +79,7 @@ export function ProblemView({
           className={cn(
             'inline-block rounded-lg px-4 py-2 text-base font-semibold transition-all',
             showAnswer
-              ? selected === (problem.answer - 1)
+              ? selected === problem.answer - 1
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'
                 : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200'
               : 'bg-muted text-muted-foreground blur-sm select-none',
@@ -87,14 +89,16 @@ export function ProblemView({
         </span>
       </div>
 
-      <div className='mt-8 flex items-center justify-between'>
-        <Button variant='outline' onClick={onPrev} disabled={isFirst}>
-          이전 문제
-        </Button>
-        <Button variant='outline' onClick={onNext} disabled={isLast}>
-          다음 문제
-        </Button>
-      </div>
+      {!hideNavigation && (
+        <div className='mt-8 flex items-center justify-between'>
+          <Button variant='outline' onClick={onPrev} disabled={isFirst}>
+            이전 문제
+          </Button>
+          <Button variant='outline' onClick={onNext} disabled={isLast}>
+            다음 문제
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

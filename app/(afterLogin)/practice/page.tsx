@@ -1,41 +1,44 @@
 'use client';
 
-import { ExplanationView } from '@/src/features/practice/ExplanationView';
-import { Header } from '@/src/features/practice/Header';
-import { ProblemView } from '@/src/features/practice/ProblemView';
-import { problems } from '@/src/shared/types/problem';
-import { Card } from '@/src/shared/ui/card';
+import { useRandomQuestions } from '@/src/features/practice/api/useRandomQuestions';
+import { ProblemSolver } from '@/src/features/practice/ui/ProblemSolver';
+import { Spinner } from '@/src/shared/ui/spinner';
 import { useState } from 'react';
 
 export default function PracticePage() {
+  const { data, isLoading, isError } = useRandomQuestions();
   const [current, setCurrent] = useState(0);
-  const [selectedMap, setSelectedMap] = useState<Record<number, number | null>>({});
-  const [showAnswerMap, setShowAnswerMap] = useState<Record<number, boolean>>({});
-  const [timeSpent, setTimeSpent] = useState(0);
-  const [history, setHistory] = useState<{ problemId: number; isCorrect: boolean }[]>([]);
 
+  if (isLoading) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return <div className='text-red-500'>문제를 불러오는 데 실패했습니다.</div>;
+  }
+
+  const problems = data.questionSets || [];
   const problem = problems[current];
-  const selected = selectedMap[problem.number] ?? null;
-  const showAnswer = showAnswerMap[problem.number] ?? false;
-  const progress = ((current + 1) / problems.length) * 100;
-  const correctCount = history.filter((h) => h.isCorrect).length;
-  const totalAttempted = Object.keys(showAnswerMap).length;
 
-  const handleSelect = (idx: number) => {
-    if (!showAnswer) {
-      setSelectedMap((prev) => ({ ...prev, [problem.number]: idx }));
-    }
-  };
-
-  const handleCheck = () => {
-    if (selected === null) return;
-    const alreadyChecked = history.some((h) => h.problemId === problem.number);
-    if (!alreadyChecked) {
-      const isCorrect = selected === problem.answer;
-      setHistory((prev) => [...prev, { problemId: problem.number, isCorrect }]);
-    }
-    setShowAnswerMap((prev) => ({ ...prev, [problem.number]: true }));
-  };
+  if (!problem) {
+    return (
+      <div className='flex h-screen flex-col items-center justify-center gap-4'>
+        <div className='text-lg font-semibold text-gray-700 dark:text-gray-200'>
+          풀 수 있는 문제가 없습니다.
+        </div>
+        <button
+          className='mt-2 rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700'
+          onClick={() => (window.location.href = '/main')}
+        >
+          메인으로 돌아가기
+        </button>
+      </div>
+    );
+  }
 
   const navigateProblem = (direction: 'prev' | 'next') => {
     setCurrent((prev) => {
@@ -44,33 +47,16 @@ export default function PracticePage() {
     });
   };
 
-  return (
-    <div className='bg-background flex min-h-[90vh] w-full items-center justify-center px-2 py-8'>
-      <Card className='dark:bg-card/90 flex min-h-[700px] w-full max-w-4xl min-w-[900px] flex-col justify-between rounded-2xl border bg-white p-0 shadow-lg'>
-        <Header
-          difficulty={problem.difficulty}
-          timeSpent={timeSpent}
-          setTimeSpent={setTimeSpent}
-          correctCount={correctCount}
-          total={totalAttempted}
-          progress={progress}
-        />
+  const progress = ((current + 1) / problems.length) * 100;
 
-        <div className='flex-1 overflow-y-auto'>
-          <ProblemView
-            problem={problem}
-            selected={selected}
-            showAnswer={showAnswer}
-            onSelect={handleSelect}
-            onCheck={handleCheck}
-            onPrev={() => navigateProblem('prev')}
-            onNext={() => navigateProblem('next')}
-            isFirst={current === 0}
-            isLast={current === problems.length - 1}
-          />
-          {showAnswer && <ExplanationView explanation={problem} />}
-        </div>
-      </Card>
-    </div>
+  return (
+    <ProblemSolver
+      problem={problem}
+      onPrev={() => navigateProblem('prev')}
+      onNext={() => navigateProblem('next')}
+      isFirst={current === 0}
+      isLast={current === problems.length - 1}
+      progress={progress}
+    />
   );
 }
