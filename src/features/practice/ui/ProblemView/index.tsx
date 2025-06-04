@@ -1,12 +1,6 @@
 import { cn } from '@/src/shared/lib/utils';
+import { Problem } from '@/src/shared/types/problem';
 import { Button } from '@/src/shared/ui/button';
-
-interface Problem {
-  questionId: number;
-  title: string;
-  choices: string[];
-  answer: number;
-}
 
 interface Props {
   problem: Problem;
