@@ -3,7 +3,7 @@
 import { useSubmitAnswer } from '@/src/features/practice/api/useSubmitAnswer';
 import { Problem } from '@/src/shared/types/problem';
 import { Card } from '@/src/shared/ui/card';
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { ExplanationView } from '../ExplanationView';
 import { Header } from '../Header';
 import { ProblemView } from '../ProblemView';
@@ -22,8 +22,8 @@ interface ProblemSolverProps {
   isLast?: boolean;
   hideNavigation?: boolean;
   progress?: number;
-  problemStates: Record<number, ProblemState>;
-  setProblemStates: Dispatch<SetStateAction<Record<number, ProblemState>>>;
+  problemStates?: Record<string, ProblemState>;
+  setProblemStates?: Dispatch<SetStateAction<Record<string, ProblemState>>>;
   correctCount: number;
   totalCount: number;
 }
@@ -42,34 +42,40 @@ export function ProblemSolver({
   totalCount,
 }: ProblemSolverProps) {
   const { mutate: submitAnswer } = useSubmitAnswer();
+  const questionKey = String(problem.question_id);
 
-  const currentState = useMemo(() => {
-    return (
-      problemStates[problem.question_id] ?? {
-        selected: null,
-        showAnswer: false,
-        timeSpent: 0,
-      }
-    );
-  }, [problemStates, problem.question_id]);
+  const isControlled = !!problemStates && !!setProblemStates;
 
-  const isCorrect = currentState.selected === parseInt(problem.answer) - 1;
+  const [localStates, setLocalStates] = useState<Record<string, ProblemState>>({});
+
+  const states = isControlled ? problemStates : localStates;
+  const setStates = isControlled ? setProblemStates : setLocalStates;
+
+  const defaultState: ProblemState = {
+    selected: null,
+    showAnswer: false,
+    timeSpent: 0,
+  };
+
+  const currentState = states?.[questionKey] ?? defaultState;
+
+  const isCorrect = useMemo(() => {
+    return currentState.selected === parseInt(problem.answer) - 1;
+  }, [currentState.selected, problem.answer]);
 
   const updateState = useCallback(
     (partial: Partial<ProblemState>) => {
-      setProblemStates((prev) => ({
+      if (!setStates) return;
+
+      setStates((prev) => ({
         ...prev,
-        [problem.question_id]: {
-          ...(prev[problem.question_id] ?? {
-            selected: null,
-            showAnswer: false,
-            timeSpent: 0,
-          }),
+        [questionKey]: {
+          ...(prev?.[questionKey] ?? defaultState),
           ...partial,
         },
       }));
     },
-    [problem.question_id, setProblemStates],
+    [questionKey, setStates],
   );
 
   const handleSelect = useCallback(
@@ -99,13 +105,13 @@ export function ProblemSolver({
     [updateState],
   );
 
-  const handlePrev = useCallback(() => {
-    onPrev();
-  }, [onPrev]);
+  const computedCorrectCount = isControlled
+    ? correctCount
+    : currentState.showAnswer && isCorrect
+      ? 1
+      : 0;
 
-  const handleNext = useCallback(() => {
-    onNext();
-  }, [onNext]);
+  const computedTotalCount = isControlled ? totalCount : currentState.showAnswer ? 1 : 0;
 
   return (
     <div className='bg-background flex min-h-[90vh] w-full items-center justify-center px-2 py-8'>
@@ -114,8 +120,8 @@ export function ProblemSolver({
           difficulty={problem.difficulty}
           timeSpent={currentState.timeSpent}
           setTimeSpent={handleTimeSpentChange}
-          correctCount={correctCount}
-          total={totalCount}
+          correctCount={computedCorrectCount}
+          total={computedTotalCount}
           progress={progress}
         />
         <div className='flex-1 overflow-y-auto'>
@@ -130,8 +136,8 @@ export function ProblemSolver({
             showAnswer={currentState.showAnswer}
             onSelect={handleSelect}
             onCheck={handleCheck}
-            onPrev={handlePrev}
-            onNext={handleNext}
+            onPrev={onPrev}
+            onNext={onNext}
             isFirst={isFirst}
             isLast={isLast}
             hideNavigation={hideNavigation}
