@@ -89,7 +89,7 @@ export function ProblemView({
               : 'bg-muted text-muted-foreground blur-sm select-none',
           )}
         >
-          정답: {String.fromCharCode(65 + problem.answer)}. {problem.choices[problem.answer]}
+          정답: {String.fromCharCode(64 + problem.answer)}. {problem.choices[problem.answer - 1]}
         </span>
       </div>
 
