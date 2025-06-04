@@ -3,11 +3,50 @@
 import { useRandomQuestions } from '@/src/features/practice/api/useRandomQuestions';
 import { ProblemSolver } from '@/src/features/practice/ui/ProblemSolver';
 import { Spinner } from '@/src/shared/ui/spinner';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+interface ProblemState {
+  selected: number | null;
+  showAnswer: boolean;
+  timeSpent: number;
+}
 
 export default function PracticePage() {
   const { data, isLoading, isError } = useRandomQuestions();
   const [current, setCurrent] = useState(0);
+  const [problemStates, setProblemStates] = useState<Record<number, ProblemState>>({});
+
+  const problems = data?.questionSets || [];
+  const problem = problems[current];
+
+  const navigateProblem = useCallback(
+    (direction: 'prev' | 'next') => {
+      setCurrent((prev) => {
+        const newIndex = direction === 'prev' ? prev - 1 : prev + 1;
+        return Math.min(Math.max(newIndex, 0), problems.length - 1);
+      });
+    },
+    [problems.length],
+  );
+
+  const progress = problems.length > 0 ? ((current + 1) / problems.length) * 100 : 0;
+
+  // 정답률 계산
+  const correctCount = problems.reduce((acc, p) => {
+    const state = problemStates[p.question_id];
+    if (state?.showAnswer && state.selected === parseInt(p.answer) - 1) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
+
+  const totalCount = problems.reduce((acc, p) => {
+    const state = problemStates[p.question_id];
+    if (state?.showAnswer) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
 
   if (isLoading) {
     return (
@@ -20,9 +59,6 @@ export default function PracticePage() {
   if (isError || !data) {
     return <div className='text-red-500'>문제를 불러오는 데 실패했습니다.</div>;
   }
-
-  const problems = data.questionSets || [];
-  const problem = problems[current];
 
   if (!problem) {
     return (
@@ -40,15 +76,6 @@ export default function PracticePage() {
     );
   }
 
-  const navigateProblem = (direction: 'prev' | 'next') => {
-    setCurrent((prev) => {
-      const newIndex = direction === 'prev' ? prev - 1 : prev + 1;
-      return Math.min(Math.max(newIndex, 0), problems.length - 1);
-    });
-  };
-
-  const progress = ((current + 1) / problems.length) * 100;
-
   return (
     <ProblemSolver
       problem={problem}
@@ -57,6 +84,10 @@ export default function PracticePage() {
       isFirst={current === 0}
       isLast={current === problems.length - 1}
       progress={progress}
+      problemStates={problemStates}
+      setProblemStates={setProblemStates}
+      correctCount={correctCount}
+      totalCount={totalCount}
     />
   );
 }
