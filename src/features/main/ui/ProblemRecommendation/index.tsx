@@ -1,11 +1,12 @@
-import { ProblemCard } from './ProblemCard';
 import { Button } from '@/src/shared/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { ProblemCard } from './ProblemCard';
 
 export interface Recommendation {
   chapterName: string;
   chapterNum: string;
   level: string;
+  questionId: number;
 }
 
 interface Props {
