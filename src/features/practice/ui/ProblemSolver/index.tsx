@@ -1,25 +1,12 @@
 'use client';
 
 import { useSubmitAnswer } from '@/src/features/practice/api/useSubmitAnswer';
+import { Problem } from '@/src/shared/types/problem';
 import { Card } from '@/src/shared/ui/card';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ExplanationView } from '../ExplanationView';
 import { Header } from '../Header';
 import { ProblemView } from '../ProblemView';
-
-interface Problem {
-  question_id: number;
-  title: string;
-  choice1: string;
-  choice2: string;
-  choice3: string;
-  choice4: string;
-  answer: string;
-  chapter: string;
-  difficulty: string;
-  explanation: string;
-  aiSummary: string;
-}
 
 interface ProblemSolverProps {
   problem: Problem;
@@ -41,61 +28,62 @@ export function ProblemSolver({
   progress = 100,
 }: ProblemSolverProps) {
   const [problemStates, setProblemStates] = useState<
-    Record<
-      number,
-      {
-        selected: number | null;
-        showAnswer: boolean;
-        timeSpent: number;
-      }
-    >
+    Record<number, { selected: number | null; showAnswer: boolean; timeSpent: number }>
   >({});
-
-  const currentState = problemStates[problem.question_id] || {
-    selected: null,
-    showAnswer: false,
-    timeSpent: 0,
-  };
 
   const { mutate: submitAnswer } = useSubmitAnswer();
 
-  const handleSelect = (idx: number) => {
-    if (!currentState.showAnswer) {
+  const currentState = useMemo(() => {
+    return (
+      problemStates[problem.question_id] ?? {
+        selected: null,
+        showAnswer: false,
+        timeSpent: 0,
+      }
+    );
+  }, [problemStates, problem.question_id]);
+
+  const isCorrect = currentState.selected === parseInt(problem.answer) - 1;
+
+  const updateState = useCallback(
+    (partial: Partial<typeof currentState>) => {
       setProblemStates((prev) => ({
         ...prev,
         [problem.question_id]: {
-          ...currentState,
-          selected: idx,
+          ...prev[problem.question_id],
+          ...partial,
         },
       }));
-    }
-  };
+    },
+    [problem.question_id],
+  );
 
-  const handleCheck = () => {
+  const handleSelect = useCallback(
+    (idx: number) => {
+      if (!currentState.showAnswer) {
+        updateState({ selected: idx });
+      }
+    },
+    [currentState.showAnswer, updateState],
+  );
+
+  const handleCheck = useCallback(() => {
     if (currentState.selected === null) return;
-    const isCorrect = currentState.selected === parseInt(problem.answer) - 1;
 
     submitAnswer({
       questionId: problem.question_id,
       correctOnFirstTry: isCorrect,
     });
 
-    setProblemStates((prev) => ({
-      ...prev,
-      [problem.question_id]: {
-        ...currentState,
-        showAnswer: true,
-      },
-    }));
-  };
+    updateState({ showAnswer: true });
+  }, [currentState.selected, isCorrect, problem.question_id, submitAnswer, updateState]);
 
-  const handlePrev = () => {
-    onPrev();
-  };
-
-  const handleNext = () => {
-    onNext();
-  };
+  const handleTimeSpentChange = useCallback(
+    (time: number) => {
+      updateState({ timeSpent: time });
+    },
+    [updateState],
+  );
 
   return (
     <div className='bg-background flex min-h-[90vh] w-full items-center justify-center px-2 py-8'>
@@ -103,20 +91,8 @@ export function ProblemSolver({
         <Header
           difficulty={problem.difficulty}
           timeSpent={currentState.timeSpent}
-          setTimeSpent={(time) => {
-            setProblemStates((prev) => ({
-              ...prev,
-              [problem.question_id]: {
-                ...currentState,
-                timeSpent: time,
-              },
-            }));
-          }}
-          correctCount={
-            currentState.showAnswer && currentState.selected === parseInt(problem.answer) - 1
-              ? 1
-              : 0
-          }
+          setTimeSpent={handleTimeSpentChange}
+          correctCount={currentState.showAnswer && isCorrect ? 1 : 0}
           total={currentState.showAnswer ? 1 : 0}
           progress={progress}
         />
@@ -133,8 +109,8 @@ export function ProblemSolver({
             showAnswer={currentState.showAnswer}
             onSelect={handleSelect}
             onCheck={handleCheck}
-            onPrev={handlePrev}
-            onNext={handleNext}
+            onPrev={onPrev}
+            onNext={onNext}
             isFirst={isFirst}
             isLast={isLast}
             hideNavigation={hideNavigation}

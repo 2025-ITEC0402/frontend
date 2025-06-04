@@ -1,6 +1,6 @@
 'use client';
 
-import { Recommendation } from '@/src/features/main/api/useRecommendations';
+import { Recommendation } from '@/src/shared/types/problem';
 import { Button } from '@/src/shared/ui/button';
 import { BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -38,7 +38,7 @@ export function ProblemCard({ chapterName, chapterNum, level, questionId }: Prop
           </div>
         </div>
       </div>
-      <Button variant='outline' size='sm' onClick={handleClick}>
+      <Button className='cursor-pointer' variant='outline' size='sm' onClick={handleClick}>
         풀어보기
       </Button>
     </div>

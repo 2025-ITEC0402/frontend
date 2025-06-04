@@ -1,16 +1,6 @@
 import { getCookieValue } from '@/src/shared/lib/cookies';
+import { RecommendationResponse } from '@/src/shared/types/problem';
 import { useQuery } from '@tanstack/react-query';
-
-export interface Recommendation {
-  chapterName: string;
-  chapterNum: string;
-  level: string;
-  questionId: number;
-}
-
-export interface RecommendationResponse {
-  recommendSets: Recommendation[];
-}
 
 const fetchRecommendations = async (): Promise<RecommendationResponse> => {
   const token = getCookieValue('accessToken');
