@@ -2,8 +2,8 @@ import { cn } from '@/src/shared/lib/utils';
 import { Button } from '@/src/shared/ui/button';
 
 interface Problem {
-  number: number;
-  question: string;
+  questionId: number;
+  title: string;
   choices: string[];
   answer: number;
 }
@@ -34,7 +34,7 @@ export function ProblemView({
   return (
     <div className='flex min-h-[700px] flex-col justify-between p-12'>
       <div className='mb-4 text-lg font-bold'>
-        {problem.number}. {problem.question}
+        {problem.questionId}. {problem.title}
       </div>
 
       <div className='mb-6 space-y-3'>
