@@ -1,11 +1,7 @@
 import { getCookieValue } from '@/src/shared/lib/cookies';
 import { queryClient } from '@/src/shared/provider/QueryProvider';
+import { UpdateTitleParams } from '@/src/shared/types/chatroom';
 import { useMutation } from '@tanstack/react-query';
-
-interface UpdateTitleParams {
-  chatRoomId: number;
-  newTitle: string;
-}
 
 export function useUpdateChatroomTitle() {
   return useMutation({
