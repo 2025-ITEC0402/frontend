@@ -15,6 +15,24 @@ export interface CreateChatroomResponse {
   created_at: string;
 }
 
+export interface ChatroomDetailResponse {
+  chatRoomId: number;
+  roomTitle: string;
+  messageList: Message[];
+}
+
+export interface SendMessageParams {
+  chatRoomId: number;
+  content: string;
+}
+
+export interface SendMessageResponse {
+  chatroom_id: number;
+  role: string;
+  answer: string;
+  created_at: string;
+}
+
 export interface DeleteChatroomParams {
   chatRoomId: number;
 }
@@ -25,9 +43,9 @@ export interface UpdateTitleParams {
 }
 
 export interface Message {
-  id: string;
+  messageId: string;
+  senderType: 'USER' | 'AI';
   content: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
+  createdAt: Date;
   imageUrl?: string;
 }
