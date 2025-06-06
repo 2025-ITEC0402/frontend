@@ -1,28 +1,50 @@
-import { Message } from '@/src/shared/types/chatroom';
-import { Bot, User } from 'lucide-react';
+'use client';
 
-interface ChatMessageBubbleProps {
+import { cn } from '@/src/shared/lib/utils';
+import { Message } from '@/src/shared/types/chatroom';
+import 'katex/dist/katex.min.css';
+import { Bot, User } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+
+interface Props {
   message: Message;
 }
 
-export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
+export function ChatMessageBubble({ message }: Props) {
   const isUser = message.senderType === 'USER';
 
   return (
-    <div className={`flex items-start gap-2 ${isUser ? 'justify-end' : ''}`}>
+    <div className={cn('flex items-start gap-2', isUser && 'justify-end')}>
       {!isUser && (
         <div className='bg-primary/10 rounded-full p-1'>
           <Bot className='text-primary h-5 w-5' />
         </div>
       )}
       <div
-        className={`max-w-[80%] rounded-lg p-3 ${
+        className={cn(
+          'max-w-[80%] rounded-lg p-3',
           isUser
             ? 'bg-primary/80 text-white dark:bg-blue-600 dark:text-gray-100'
-            : 'bg-white dark:bg-gray-800 dark:text-white'
-        }`}
+            : 'bg-white dark:bg-gray-800 dark:text-white',
+        )}
       >
-        <p className='text-sm break-words'>{message.content}</p>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+          components={{
+            p: ({ children }) => (
+              <p className='prose dark:prose-invert max-w-full text-sm leading-relaxed break-words'>
+                {children}
+              </p>
+            ),
+          }}
+        >
+          {message.content}
+        </ReactMarkdown>
+
         {message.imageUrl && (
           <img
             src={message.imageUrl}
