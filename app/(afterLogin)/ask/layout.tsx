@@ -1,4 +1,4 @@
-import { AskSidebarClient } from '@/src/features/ask/ui/AskSidebar/AskSidebarClient';
+import { AskSidebar } from '@/src/features/ask/ui/AskSidebar';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
@@ -11,7 +11,7 @@ export default function AskLayout({ children }: { children: ReactNode }) {
   return (
     <div className='bg-background flex w-full justify-center'>
       <div className='flex h-[calc(100vh-4em-1px)] w-full max-w-7xl min-w-0'>
-        <AskSidebarClient />
+        <AskSidebar />
         <main className='min-w-0 flex-1 overflow-hidden'>{children}</main>
       </div>
     </div>
