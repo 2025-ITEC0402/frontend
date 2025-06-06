@@ -1,0 +1,35 @@
+import { getCookieValue } from '@/src/shared/lib/cookies';
+import { queryClient } from '@/src/shared/provider/QueryProvider';
+import { useMutation } from '@tanstack/react-query';
+
+interface UpdateTitleParams {
+  chatRoomId: number;
+  newTitle: string;
+}
+
+export function useUpdateChatroomTitle() {
+  return useMutation({
+    mutationFn: async ({ chatRoomId, newTitle }: UpdateTitleParams) => {
+      const token = getCookieValue('accessToken');
+      if (!token) throw new Error('No access token found in cookies');
+
+      const res = await fetch(`/api/ask/chat/${chatRoomId}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newTitle }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update chatroom title');
+      }
+
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+  });
+}
