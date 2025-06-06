@@ -1,0 +1,33 @@
+export interface Chatroom {
+  chatRoomId: number;
+  roomTitle: string;
+}
+
+export interface CreateChatroomRequest {
+  content: string;
+}
+
+export interface CreateChatroomResponse {
+  chatroomId: number;
+  title: string;
+  role: string;
+  answer: string;
+  created_at: string;
+}
+
+export interface DeleteChatroomParams {
+  chatRoomId: number;
+}
+
+export interface UpdateTitleParams {
+  chatRoomId: number;
+  newTitle: string;
+}
+
+export interface Message {
+  id: string;
+  content: string;
+  sender: 'user' | 'ai';
+  timestamp: Date;
+  imageUrl?: string;
+}
