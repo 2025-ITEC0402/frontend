@@ -19,7 +19,7 @@ export function AskChat({ chatroom }: AskChatProps) {
   const [input, setInput] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: sendMessage } = useSendMessage();
+  const { mutate: sendMessage, isPending } = useSendMessage();
 
   useEffect(() => {
     const initialMessages: Message[] = chatroom.messageList.map((m) => ({
@@ -99,7 +99,12 @@ export function AskChat({ chatroom }: AskChatProps) {
           ref={fileInputRef}
           className='hidden'
         />
-        <Button variant='outline' type='button' onClick={() => fileInputRef.current?.click()}>
+        <Button
+          variant='outline'
+          type='button'
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isPending}
+        >
           <Image className='h-4 w-4' />
         </Button>
         <Input
@@ -107,8 +112,9 @@ export function AskChat({ chatroom }: AskChatProps) {
           onChange={(e) => setInput(e.target.value)}
           placeholder='질문을 입력하세요...'
           className='flex-1'
+          disabled={isPending}
         />
-        <Button type='submit'>
+        <Button type='submit' disabled={isPending}>
           <Send className='h-4 w-4' />
         </Button>
       </form>
