@@ -7,7 +7,7 @@ import { Input } from '@/src/shared/ui/input';
 import { Image, Send } from 'lucide-react';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { ChatMessageBubble } from './ChatMessageBubble';
+import ChatMessageBubble from './ChatMessageBubble';
 import { ImagePreview } from './ImagePreview';
 
 interface AskChatProps {
@@ -17,7 +17,7 @@ interface AskChatProps {
 export function AskChat({ chatroom }: AskChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: sendMessage, isPending } = useSendMessage();
 
@@ -27,6 +27,7 @@ export function AskChat({ chatroom }: AskChatProps) {
       senderType: m.senderType as 'USER' | 'AI',
       content: m.content,
       createdAt: new Date(m.createdAt),
+      imageUrl: m.imageUrl,
     }));
     setMessages(initialMessages);
   }, [chatroom]);
@@ -34,15 +35,13 @@ export function AskChat({ chatroom }: AskChatProps) {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setSelectedImage(reader.result as string);
-      reader.readAsDataURL(file);
+      setImageFile(file);
     }
   };
 
   const handleSend = (e?: FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() && !selectedImage) {
+    if (!input.trim() && !imageFile) {
       toast.warning('이미지 첨부 또는 질문을 입력해 주세요!');
       return;
     }
@@ -52,16 +51,20 @@ export function AskChat({ chatroom }: AskChatProps) {
       content: input,
       senderType: 'USER',
       createdAt: new Date(),
-      imageUrl: selectedImage || undefined,
+      imageUrl: imageFile ? URL.createObjectURL(imageFile) : undefined,
     };
 
     setMessages((prev) => [...prev, newMessage]);
     setInput('');
-    setSelectedImage(null);
+    setImageFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
 
     sendMessage(
-      { chatRoomId: chatroom.chatRoomId, content: input },
+      {
+        chatRoomId: chatroom.chatRoomId,
+        content: input.trim(),
+        imageFile: imageFile ?? undefined,
+      },
       {
         onSuccess: (res) => {
           const aiMessage: Message = {
@@ -87,8 +90,8 @@ export function AskChat({ chatroom }: AskChatProps) {
         ))}
       </div>
 
-      {selectedImage && (
-        <ImagePreview image={selectedImage} onRemove={() => setSelectedImage(null)} />
+      {imageFile && (
+        <ImagePreview image={URL.createObjectURL(imageFile)} onRemove={() => setImageFile(null)} />
       )}
 
       <form className='flex gap-2' onSubmit={handleSend}>
