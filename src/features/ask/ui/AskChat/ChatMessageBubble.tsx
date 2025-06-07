@@ -16,6 +16,10 @@ interface Props {
 export function ChatMessageBubble({ message }: Props) {
   const isUser = message.senderType === 'USER';
 
+  const formattedContent = message.content
+    .replace(/\n/g, '\n\n')
+    .replace(/\$\$([\s\S]*?)\$\$/g, '\n\n$$$1$$\n\n');
+
   return (
     <div className={cn('flex items-start gap-2', isUser && 'justify-end')}>
       {!isUser && (
@@ -35,14 +39,40 @@ export function ChatMessageBubble({ message }: Props) {
           remarkPlugins={[remarkGfm, remarkMath]}
           rehypePlugins={[rehypeKatex]}
           components={{
+            h2: ({ children }) => (
+              <h2 className='mb-3 text-lg font-bold text-blue-600 dark:text-blue-400'>
+                {children}
+              </h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className='mt-5 mb-2 text-base font-semibold text-gray-800 dark:text-gray-300'>
+                {children}
+              </h3>
+            ),
+            h4: ({ children }) => (
+              <h4 className='mt-4 mb-1 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                {children}
+              </h4>
+            ),
             p: ({ children }) => (
-              <p className='prose dark:prose-invert max-w-full text-sm leading-relaxed break-words'>
+              <p className='mb-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300'>
                 {children}
               </p>
             ),
+            ul: ({ children }) => (
+              <ul className='mb-3 list-disc space-y-1 pl-5 text-sm text-gray-700 dark:text-gray-300'>
+                {children}
+              </ul>
+            ),
+            li: ({ children }) => <li className='leading-relaxed'>{children}</li>,
+            blockquote: ({ children }) => (
+              <blockquote className='my-4 border-l-4 border-blue-400 pl-4 text-sm text-gray-600 italic dark:text-gray-400'>
+                {children}
+              </blockquote>
+            ),
           }}
         >
-          {message.content}
+          {formattedContent}
         </ReactMarkdown>
 
         {message.imageUrl && (
