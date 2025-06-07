@@ -8,7 +8,7 @@ export interface CreateChatroomRequest {
 }
 
 export interface CreateChatroomResponse {
-  chatroomId: number;
+  chatroom_id: number;
   title: string;
   role: string;
   answer: string;
@@ -23,7 +23,8 @@ export interface ChatroomDetailResponse {
 
 export interface SendMessageParams {
   chatRoomId: number;
-  content: string;
+  content?: string;
+  imageFile?: File;
 }
 
 export interface SendMessageResponse {
