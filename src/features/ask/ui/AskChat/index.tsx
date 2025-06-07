@@ -80,7 +80,7 @@ export function AskChat({ chatroom }: AskChatProps) {
   };
 
   return (
-    <div className='bg-card/80 mx-auto flex h-[90vh] min-h-[500px] w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50'>
+    <div className='bg-card/80 mx-auto flex h-full w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50'>
       <div className='scrollbar-hide mb-4 flex-1 space-y-4 overflow-y-auto pr-2'>
         {messages.map((message) => (
           <ChatMessageBubble key={message.messageId} message={message} />

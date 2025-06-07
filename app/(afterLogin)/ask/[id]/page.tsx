@@ -26,7 +26,7 @@ export default function AskMainPage() {
     );
 
   return (
-    <main className='flex h-full flex-1 flex-col p-8'>
+    <main className='flex h-full flex-1 flex-col p-4'>
       <AskChat chatroom={data} />
     </main>
   );

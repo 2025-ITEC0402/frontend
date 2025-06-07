@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function AskLayout({ children }: { children: ReactNode }) {
   return (
-    <div className='bg-background flex w-full justify-center'>
-      <div className='flex h-[calc(100vh-4em-1px)] w-full max-w-7xl min-w-0'>
+    <div className='bg-background flex h-[calc(100vh-4rem)] w-full justify-center'>
+      <div className='flex w-full max-w-7xl min-w-0'>
         <AskSidebar />
         <main className='min-w-0 flex-1 overflow-hidden'>{children}</main>
       </div>
