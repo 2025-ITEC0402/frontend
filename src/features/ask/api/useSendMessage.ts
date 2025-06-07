@@ -4,17 +4,24 @@ import { useMutation } from '@tanstack/react-query';
 
 export function useSendMessage() {
   return useMutation<SendMessageResponse, Error, SendMessageParams>({
-    mutationFn: async ({ chatRoomId, content }) => {
+    mutationFn: async ({ chatRoomId, content, imageFile }) => {
       const token = getCookieValue('accessToken');
       if (!token) throw new Error('No access token found in cookies');
+
+      const formData = new FormData();
+      if (content) formData.append('query', content);
+      if (imageFile instanceof File) formData.append('img', imageFile);
+
+      for (const [key, value] of formData.entries()) {
+        console.log(`FormData - ${key}:`, value);
+      }
 
       const res = await fetch(`/api/ask/chat/${chatRoomId}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content }),
+        body: formData,
       });
 
       if (!res.ok) {
