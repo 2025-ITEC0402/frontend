@@ -30,11 +30,12 @@ export default function StudyChapterPage() {
   if (!chapterData) return <div>존재하지 않는 챕터입니다.</div>;
 
   return (
-    <div className='prose dark:prose-invert prose-p:my-4 prose-li:my-2 prose-h2:mt-8 prose-h3:mt-6 prose-h4:mt-4 mx-auto max-w-4xl p-8'>
+    <div className='prose dark:prose-invert prose-p:my-4 prose-li:my-2 prose-h2:mt-8 prose-h3:mt-6 prose-h4:mt-4 prose-h1:mt-0 mx-auto max-w-4xl p-8 [&_h1:not(:first-of-type)]:mt-12'>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
+          h1: ({ children }) => <h1 className='mb-8 text-3xl font-extrabold'>{children}</h1>,
           h2: ({ children }) => (
             <h2 className='mb-3 text-lg font-bold text-blue-600 dark:text-blue-400'>{children}</h2>
           ),
@@ -73,5 +74,8 @@ export default function StudyChapterPage() {
 }
 
 function formatMarkdown(content: string): string {
-  return content.replace(/\r\n/g, '\n').replace(/\n{1}(?!\n)/g, '\n\n');
+  return content
+    .replace(/\r\n/g, '\n')
+    .replace(/([^\n])\n# /g, '$1\n\n# ')
+    .replace(/([^\n])\n(?!\n|[#>\-*])/g, '$1\n\n');
 }
