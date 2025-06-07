@@ -4,6 +4,7 @@ import { cn } from '@/src/shared/lib/utils';
 import { Message } from '@/src/shared/types/chatroom';
 import 'katex/dist/katex.min.css';
 import { Bot, User } from 'lucide-react';
+import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
@@ -13,12 +14,12 @@ interface Props {
   message: Message;
 }
 
-export function ChatMessageBubble({ message }: Props) {
+const ChatMessageBubble = React.memo(function ChatMessageBubble({ message }: Props) {
   const isUser = message.senderType === 'USER';
 
-  const formattedContent = message.content
-    .replace(/\n/g, '\n\n')
-    .replace(/\$\$([\s\S]*?)\$\$/g, '\n\n$$$1$$\n\n');
+  const formattedContent = useMemo(() => {
+    return message.content.replace(/\n/g, '\n\n');
+  }, [message.content]);
 
   return (
     <div className={cn('flex items-start gap-2', isUser && 'justify-end')}>
@@ -70,6 +71,16 @@ export function ChatMessageBubble({ message }: Props) {
                 {children}
               </blockquote>
             ),
+            a: ({ href, children }) => (
+              <a
+                href={href}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-blue-600 underline transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'
+              >
+                {children}
+              </a>
+            ),
           }}
         >
           {formattedContent}
@@ -90,4 +101,6 @@ export function ChatMessageBubble({ message }: Props) {
       )}
     </div>
   );
-}
+});
+
+export default ChatMessageBubble;
