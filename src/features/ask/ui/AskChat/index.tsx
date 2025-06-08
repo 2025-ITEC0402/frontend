@@ -9,34 +9,52 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import ChatMessageBubble from './ChatMessageBubble';
 import { ImagePreview } from './ImagePreview';
+import StepProgressBar from './StepProgressbar';
 
 interface AskChatProps {
   chatroom: ChatroomDetailResponse;
 }
 
-export function AskChat({ chatroom }: AskChatProps) {
+export default function AskChat({ chatroom }: AskChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [step, setStep] = useState(0);
+  const [isProgressVisible, setIsProgressVisible] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: sendMessage, isPending } = useSendMessage();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { mutate: sendMessage } = useSendMessage();
 
   useEffect(() => {
-    const initialMessages: Message[] = chatroom.messageList.map((m) => ({
-      messageId: String(m.messageId),
-      senderType: m.senderType as 'USER' | 'AI',
-      content: m.content,
-      createdAt: new Date(m.createdAt),
-      imageUrl: m.imageUrl,
-    }));
-    setMessages(initialMessages);
+    setMessages(
+      chatroom.messageList.map((m) => ({
+        messageId: String(m.messageId),
+        senderType: m.senderType as 'USER' | 'AI',
+        content: m.content,
+        createdAt: new Date(m.createdAt),
+        imageUrl: m.imageUrl,
+      })),
+    );
   }, [chatroom]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-    }
+    if (file) setImageFile(file);
+  };
+
+  const resetInput = () => {
+    setInput('');
+    setImageFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const appendMessage = (msg: Message) => {
+    setMessages((prev) => [...prev, msg]);
   };
 
   const handleSend = (e?: FormEvent) => {
@@ -46,7 +64,7 @@ export function AskChat({ chatroom }: AskChatProps) {
       return;
     }
 
-    const newMessage: Message = {
+    const userMessage: Message = {
       messageId: Date.now().toString(),
       content: input,
       senderType: 'USER',
@@ -54,10 +72,11 @@ export function AskChat({ chatroom }: AskChatProps) {
       imageUrl: imageFile ? URL.createObjectURL(imageFile) : undefined,
     };
 
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
-    setImageFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    appendMessage(userMessage);
+    resetInput();
+
+    setIsProgressVisible(true);
+    setStep(0);
 
     sendMessage(
       {
@@ -67,24 +86,32 @@ export function AskChat({ chatroom }: AskChatProps) {
       },
       {
         onSuccess: (res) => {
-          const aiMessage: Message = {
+          appendMessage({
             messageId: Date.now().toString(),
             senderType: 'AI',
             content: res.answer,
             createdAt: new Date(res.created_at),
-          };
-          setMessages((prev) => [...prev, aiMessage]);
+          });
+          setStep(3);
+          setTimeout(() => setIsProgressVisible(false), 1500);
         },
         onError: () => {
           toast.error('메시지 전송에 실패했습니다.');
+          setIsProgressVisible(false);
         },
       },
     );
   };
 
   return (
-    <div className='bg-card/80 mx-auto flex h-full w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50'>
-      <div className='scrollbar-hide mb-4 flex-1 space-y-4 overflow-y-auto pr-2'>
+    <div className='bg-card/80 mx-auto flex h-full w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50 relative'>
+      {isProgressVisible && (
+        <div className='absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80'>
+          <StepProgressBar loading step={step} setStep={setStep} />
+        </div>
+      )}
+
+      <div ref={scrollRef} className='scrollbar-hide mb-4 flex-1 space-y-4 overflow-y-auto pr-2'>
         {messages.map((message) => (
           <ChatMessageBubble key={message.messageId} message={message} />
         ))}
@@ -106,7 +133,7 @@ export function AskChat({ chatroom }: AskChatProps) {
           variant='outline'
           type='button'
           onClick={() => fileInputRef.current?.click()}
-          disabled={isPending}
+          disabled={isProgressVisible}
         >
           <Image className='h-4 w-4' />
         </Button>
@@ -115,14 +142,12 @@ export function AskChat({ chatroom }: AskChatProps) {
           onChange={(e) => setInput(e.target.value)}
           placeholder='질문을 입력하세요...'
           className='flex-1'
-          disabled={isPending}
+          disabled={isProgressVisible}
         />
-        <Button type='submit' disabled={isPending}>
+        <Button type='submit' disabled={isProgressVisible}>
           <Send className='h-4 w-4' />
         </Button>
       </form>
     </div>
   );
 }
-
-export default AskChat;
