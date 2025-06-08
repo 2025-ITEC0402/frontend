@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { chatRoomId: number } }) {
+export async function GET(req: NextRequest, context: { params: { chatRoomId: string } }) {
   const token = req.headers.get('authorization');
-  const { chatRoomId } = await params;
+  const { chatRoomId } = context.params;
 
   if (!token || !token.startsWith('Bearer ')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -32,13 +32,14 @@ export async function GET(req: NextRequest, { params }: { params: { chatRoomId: 
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { chatRoomId: number } }) {
+export async function POST(req: NextRequest, context: { params: { chatRoomId: string } }) {
   const token = req.headers.get('authorization');
+  const { chatRoomId } = context.params;
+
   if (!token || !token.startsWith('Bearer ')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { chatRoomId } = await params;
   const formData = await req.formData();
 
   try {
@@ -65,14 +66,14 @@ export async function POST(req: NextRequest, { params }: { params: { chatRoomId:
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { chatRoomId: number } }) {
+export async function PUT(req: NextRequest, context: { params: { chatRoomId: string } }) {
   const token = req.headers.get('authorization');
+  const { chatRoomId } = context.params;
 
   if (!token || !token.startsWith('Bearer ')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { chatRoomId } = await params;
   const body = await req.json();
   const { newTitle } = body;
 
@@ -101,14 +102,13 @@ export async function PUT(req: NextRequest, { params }: { params: { chatRoomId: 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { chatRoomId: number } }) {
+export async function DELETE(req: NextRequest, context: { params: { chatRoomId: string } }) {
   const token = req.headers.get('authorization');
+  const { chatRoomId } = context.params;
 
   if (!token || !token.startsWith('Bearer ')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-
-  const { chatRoomId } = await params;
 
   try {
     const response = await fetch(
