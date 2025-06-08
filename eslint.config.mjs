@@ -1,6 +1,8 @@
+import { FlatCompat } from '@eslint/eslintrc';
+import importPlugin from 'eslint-plugin-import';
+import prettierPlugin from 'eslint-plugin-prettier';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -9,30 +11,27 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+export default [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+
   {
-    plugins: ['prettier', 'import'],
-    extends: ['plugin:prettier/recommended'],
+    plugins: {
+      prettier: prettierPlugin,
+      import: importPlugin,
+    },
     rules: {
       'prettier/prettier': 'error',
       'import/order': [
         'warn',
         {
-          'groups': [
-            'builtin',   // Node.js 기본 모듈 (fs, path 등)
-            'external',  // npm 패키지 (react, lodash 등)
-            'internal',  // src 내에서 import 하는 모듈
-            'parent',    // 부모 디렉토리에서 import
-            'sibling',   // 같은 디렉토리에서 import
-            'index'      // index 파일 import
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           'newlines-between': 'always',
-          'alphabetize': { 'order': 'asc', 'caseInsensitive': true },
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
         },
       ],
     },
   },
 ];
-
-export default eslintConfig;
