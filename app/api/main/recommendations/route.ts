@@ -8,22 +8,27 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URI}/api/question/recommendations`, {
-      method: 'GET',
-      headers: {
-        Authorization: token,
-        Accept: 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/question/recommendations`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    });
+    );
 
     if (!response.ok) {
-      return NextResponse.json({ message: 'Failed to fetch recommendations' }, { status: response.status });
+      return NextResponse.json(
+        { message: 'Failed to fetch recommendations' },
+        { status: response.status },
+      );
     }
 
     const data = await response.json();
     return NextResponse.json(data, { status: 200 });
-
   } catch (error) {
     console.error('Recommendations API error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });

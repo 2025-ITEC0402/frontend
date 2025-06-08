@@ -1,9 +1,10 @@
 'use client';
 
-import { Recommendation } from '@/src/shared/types/problem';
-import { Button } from '@/src/shared/ui/button';
 import { BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+
+import { Recommendation } from '@/src/shared/types/problem';
+import { Button } from '@/src/shared/ui/button';
 
 interface Props extends Recommendation {
   questionId: number;

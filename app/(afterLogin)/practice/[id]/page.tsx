@@ -1,9 +1,10 @@
 'use client';
 
+import { useParams } from 'next/navigation';
+
 import { useSpecificQuestion } from '@/src/features/practice/api/useSpecificQuestion';
 import { ProblemSolver } from '@/src/features/practice/ui/ProblemSolver';
 import { Spinner } from '@/src/shared/ui/spinner';
-import { useParams } from 'next/navigation';
 
 export default function PracticeByIdPage() {
   const params = useParams();

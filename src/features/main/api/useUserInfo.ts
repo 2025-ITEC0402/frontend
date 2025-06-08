@@ -1,5 +1,6 @@
-import { getCookieValue } from '@/src/shared/lib/cookies';
 import { useQuery } from '@tanstack/react-query';
+
+import { getCookieValue } from '@/src/shared/lib/cookies';
 
 export interface UserData {
   userName: string;

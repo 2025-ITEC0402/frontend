@@ -2,6 +2,7 @@
 
 import { cn } from '@/src/shared/lib/utils';
 import { Message } from '@/src/shared/types/chatroom';
+
 import 'katex/dist/katex.min.css';
 import { Bot, User } from 'lucide-react';
 import React, { useMemo } from 'react';

@@ -1,6 +1,7 @@
+import type { Metadata } from 'next';
+
 import Navbar from '@/src/app/layouts/Navbar';
 import RefreshTokenProvider from '@/src/shared/provider/RefreshTokenProvider';
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'AI 학습 플랫폼 | 대시보드',

@@ -1,7 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { getCookieValue } from '@/src/shared/lib/cookies';
 import { queryClient } from '@/src/shared/provider/QueryProvider';
 import { UpdateTitleParams } from '@/src/shared/types/chatroom';
-import { useMutation } from '@tanstack/react-query';
 
 export function useUpdateChatroomTitle() {
   return useMutation({

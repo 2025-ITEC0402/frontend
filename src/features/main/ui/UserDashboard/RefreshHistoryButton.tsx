@@ -1,11 +1,12 @@
 'use client';
 
-import { useUpdateLearningHistory } from '@/src/features/main/api/useUpdateLearningHistory';
-import { queryClient } from '@/src/shared/provider/QueryProvider';
-import { Button } from '@/src/shared/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+
+import { useUpdateLearningHistory } from '@/src/features/main/api/useUpdateLearningHistory';
+import { queryClient } from '@/src/shared/provider/QueryProvider';
+import { Button } from '@/src/shared/ui/button';
 
 export function RefreshHistoryButton() {
   const router = useRouter();

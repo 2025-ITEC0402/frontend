@@ -1,9 +1,10 @@
 'use client';
 
-import KakaoLoginImage from '@/public/images/kakao_login_large_wide.png';
-import { getKakaoLoginUrl } from '@/src/shared/lib/OAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+
+import KakaoLoginImage from '@/public/images/kakao_login_large_wide.png';
+import { getKakaoLoginUrl } from '@/src/shared/lib/OAuth';
 
 export default function KakaoLoginButton() {
   const router = useRouter();

@@ -1,6 +1,7 @@
-import { ChapterSidebar } from '@/src/features/study/ui/ChapterSidebar';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
+
+import { ChapterSidebar } from '@/src/features/study/ui/ChapterSidebar';
 
 export const metadata: Metadata = {
   title: 'AI 학습 플랫폼 | 개념 학습',

@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
+
 import { getCookieValue } from '@/src/shared/lib/cookies';
 import { RecommendationResponse } from '@/src/shared/types/problem';
-import { useQuery } from '@tanstack/react-query';
 
 const fetchRecommendations = async (): Promise<RecommendationResponse> => {
   const token = getCookieValue('accessToken');

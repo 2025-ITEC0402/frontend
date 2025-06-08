@@ -1,9 +1,10 @@
 'use client';
 
+import { useCallback, useState } from 'react';
+
 import { useRandomQuestions } from '@/src/features/practice/api/useRandomQuestions';
 import { ProblemSolver } from '@/src/features/practice/ui/ProblemSolver';
 import { Spinner } from '@/src/shared/ui/spinner';
-import { useCallback, useState } from 'react';
 
 interface ProblemState {
   selected: number | null;

@@ -1,7 +1,8 @@
 'use client';
 
-import { useRefreshAccessToken } from '@/src/features/auth/hooks/useRefreshAccessToken';
 import { useEffect } from 'react';
+
+import { useRefreshAccessToken } from '@/src/features/auth/hooks/useRefreshAccessToken';
 
 export default function RefreshTokenProvider() {
   const refresh = useRefreshAccessToken();

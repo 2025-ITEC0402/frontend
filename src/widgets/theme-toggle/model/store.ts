@@ -8,7 +8,7 @@ interface ToggleState {
 
 const useDarkModeStore = create<ToggleState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       darkMode: false,
       toggleDarkMode: () =>
         set((state) => {

@@ -26,8 +26,7 @@ export async function POST(req: NextRequest) {
       throw new Error(`백엔드 응답 오류: ${response.status}`);
     }
     return NextResponse.json({ message: '정답 여부 저장 완료' });
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('백엔드 저장 실패:', error);
     return NextResponse.json({ error: '서버 저장 실패' }, { status: 500 });
   }

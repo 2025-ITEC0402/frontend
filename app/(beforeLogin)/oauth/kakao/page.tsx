@@ -1,10 +1,11 @@
 'use client';
 
-import { useKakaoLogin } from '@/src/features/auth/hooks/useKakaoLogin';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
+
+import { useKakaoLogin } from '@/src/features/auth/hooks/useKakaoLogin';
 
 export default function KakaoRedirectPage() {
   const router = useRouter();

@@ -1,9 +1,10 @@
 'use client';
 
-import { Button } from '@/src/shared/ui/button';
 import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+
+import { Button } from '@/src/shared/ui/button';
 
 export function LogoutButton() {
   const router = useRouter();

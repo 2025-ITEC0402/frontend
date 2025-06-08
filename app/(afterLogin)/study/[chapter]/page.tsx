@@ -4,6 +4,7 @@ import { useCompleteChapter } from '@/src/features/study/api/useCompleteChapter'
 import { MarkdownRenderer } from '@/src/features/study/ui/MarkdownRenderer';
 import { chapters } from '@/src/shared/types/chapters';
 import { Button } from '@/src/shared/ui/button';
+
 import 'katex/dist/katex.min.css';
 import { CheckCircle2 } from 'lucide-react';
 import { useParams } from 'next/navigation';

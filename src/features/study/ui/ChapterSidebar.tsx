@@ -1,7 +1,8 @@
 'use client';
 
-import { chapters } from '@/src/shared/types/chapters';
 import { usePathname, useRouter } from 'next/navigation';
+
+import { chapters } from '@/src/shared/types/chapters';
 
 export function ChapterSidebar() {
   const router = useRouter();

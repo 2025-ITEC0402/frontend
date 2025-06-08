@@ -1,12 +1,13 @@
 'use client';
 
-import darkLogo from '@/public/images/darkLogo.png';
-import lightLogo from '@/public/images/lightLogo.png';
-import { ThemeToggleButton } from '@/src/widgets/theme-toggle';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import darkLogo from '@/public/images/darkLogo.png';
+import lightLogo from '@/public/images/lightLogo.png';
+import { ThemeToggleButton } from '@/src/widgets/theme-toggle';
 
 const menuItems = [
   { label: '개념 학습', href: '/study' },

@@ -17,8 +17,7 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('카카오 로그인 처리 중 오류 발생:', error);
     return NextResponse.json(
       { error: '카카오 로그인 처리 중 오류가 발생했습니다.' },

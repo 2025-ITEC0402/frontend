@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ message: 'Failed to fetch user info' }, { status: 500 });
   }
 }

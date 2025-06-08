@@ -1,6 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { getCookieValue } from '@/src/shared/lib/cookies';
 import { CreateChatroomRequest, CreateChatroomResponse } from '@/src/shared/types/chatroom';
-import { useMutation } from '@tanstack/react-query';
 
 export function useCreateChatroom() {
   return useMutation<CreateChatroomResponse, Error, CreateChatroomRequest>({

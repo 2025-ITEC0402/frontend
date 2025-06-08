@@ -1,5 +1,7 @@
-import { Button } from '@/src/shared/ui/button';
 import { ChevronRight } from 'lucide-react';
+
+import { Button } from '@/src/shared/ui/button';
+
 import { ProblemCard } from './ProblemCard';
 
 export interface Recommendation {

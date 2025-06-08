@@ -3,17 +3,13 @@
 import { useRecommendations } from '@/src/features/main/api/useRecommendations';
 import { useStreakInfo } from '@/src/features/main/api/useStreakInfo';
 import { useUserInfo } from '@/src/features/main/api/useUserInfo';
-
-import { UserDashboard } from '@/src/features/main/ui/UserDashboard';
-import { UserDashboardSkeleton } from '@/src/features/main/ui/UserDashboard/Skeleton';
-
-import { StreakBoard } from '@/src/features/main/ui/StreakBoard';
-import { StreakBoardSkeleton } from '@/src/features/main/ui/StreakBoard/Skeleton';
-
+import { AITutorChat } from '@/src/features/main/ui/AITutorChat';
 import { ProblemRecommendation } from '@/src/features/main/ui/ProblemRecommendation';
 import { ProblemRecommendationSkeleton } from '@/src/features/main/ui/ProblemRecommendation/Skeleton';
-
-import { AITutorChat } from '@/src/features/main/ui/AITutorChat';
+import { StreakBoard } from '@/src/features/main/ui/StreakBoard';
+import { StreakBoardSkeleton } from '@/src/features/main/ui/StreakBoard/Skeleton';
+import { UserDashboard } from '@/src/features/main/ui/UserDashboard';
+import { UserDashboardSkeleton } from '@/src/features/main/ui/UserDashboard/Skeleton';
 
 export default function AfterLoginHome() {
   const { data: userData, isLoading: isUserLoading, isError: isUserError } = useUserInfo();

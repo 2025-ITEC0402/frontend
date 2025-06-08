@@ -1,5 +1,6 @@
-import { Message } from '@/src/shared/types/chatroom';
 import { Bot, User } from 'lucide-react';
+
+import { Message } from '@/src/shared/types/chatroom';
 
 export function MessageList({ messages }: { messages: Message[] }) {
   return (

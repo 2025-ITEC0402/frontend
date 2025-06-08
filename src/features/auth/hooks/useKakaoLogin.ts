@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+
 import { requestKakaoLogin } from '../model/requestKakaoLogin';
 
 interface KakaoLoginResponse {

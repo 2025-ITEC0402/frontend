@@ -1,12 +1,14 @@
 'use client';
 
+import { Image, Send } from 'lucide-react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
+
 import { useSendMessage } from '@/src/features/ask/api/useSendMessage';
 import { ChatroomDetailResponse, Message } from '@/src/shared/types/chatroom';
 import { Button } from '@/src/shared/ui/button';
 import { Input } from '@/src/shared/ui/input';
-import { Image, Send } from 'lucide-react';
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
+
 import ChatMessageBubble from './ChatMessageBubble';
 import { ImagePreview } from './ImagePreview';
 import StepProgressBar from './StepProgressbar';
@@ -104,7 +106,7 @@ export default function AskChat({ chatroom }: AskChatProps) {
   };
 
   return (
-    <div className='bg-card/80 mx-auto flex h-full w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50 relative'>
+    <div className='bg-card/80 relative mx-auto flex h-full w-full max-w-4xl flex-col rounded-xl border p-6 shadow-lg dark:bg-gray-900/50'>
       {isProgressVisible && (
         <div className='absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80'>
           <StepProgressBar loading step={step} setStep={setStep} />

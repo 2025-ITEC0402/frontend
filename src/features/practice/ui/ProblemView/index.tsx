@@ -1,9 +1,10 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { cn } from '@/src/shared/lib/utils';
 import { ProblemViewProps } from '@/src/shared/types/problem';
 import { Button } from '@/src/shared/ui/button';
-import { useMemo } from 'react';
 
 interface Props {
   problem: ProblemViewProps;
@@ -54,7 +55,10 @@ export function ProblemView({
                 'flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition',
                 isSelected && 'border-primary bg-primary/10',
                 showAnswer && isAnswer && 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30',
-                showAnswer && isSelected && !isAnswer && 'border-2 border-red-500 bg-red-50 dark:bg-red-900/30',
+                showAnswer &&
+                  isSelected &&
+                  !isAnswer &&
+                  'border-2 border-red-500 bg-red-50 dark:bg-red-900/30',
               )}
             >
               <input

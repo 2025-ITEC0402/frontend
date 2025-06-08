@@ -1,9 +1,11 @@
 'use client';
 
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
+
 import { useSubmitAnswer } from '@/src/features/practice/api/useSubmitAnswer';
 import { Problem } from '@/src/shared/types/problem';
 import { Card } from '@/src/shared/ui/card';
-import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
+
 import { ExplanationView } from '../ExplanationView';
 import { Header } from '../Header';
 import { ProblemView } from '../ProblemView';

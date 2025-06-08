@@ -1,7 +1,8 @@
-import { Button } from '@/src/shared/ui/button';
-import { Input } from '@/src/shared/ui/input';
 import { Image, Send } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/src/shared/ui/button';
+import { Input } from '@/src/shared/ui/input';
 
 export function ChatInput({
   input,

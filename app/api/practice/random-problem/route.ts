@@ -8,22 +8,27 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URI}/api/question/random-questions`, {
-      method: 'GET',
-      headers: {
-        Authorization: token,
-        Accept: 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/question/random-questions`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    });
+    );
 
     if (!response.ok) {
-      return NextResponse.json({ message: 'Failed to fetch random questions' }, { status: response.status });
+      return NextResponse.json(
+        { message: 'Failed to fetch random questions' },
+        { status: response.status },
+      );
     }
     const data = await response.json();
     return NextResponse.json(data, { status: 200 });
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('Error fetching random questions:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }

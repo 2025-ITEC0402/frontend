@@ -1,7 +1,8 @@
+import { Clock, Trophy } from 'lucide-react';
+
 import { Timer } from '@/src/features/practice/ui/Timer';
 import { Badge } from '@/src/shared/ui/badge';
 import { Progress } from '@/src/shared/ui/progress';
-import { Clock, Trophy } from 'lucide-react';
 
 export function Header({
   difficulty,

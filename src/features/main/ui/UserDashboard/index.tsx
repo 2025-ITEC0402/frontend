@@ -1,10 +1,10 @@
 'use client';
 
+import { CalendarCheck, Target, TrendingUp } from 'lucide-react';
+
 import { LogoutButton } from '@/src/features/main/ui/UserDashboard/LogoutButton';
 import { RefreshHistoryButton } from '@/src/features/main/ui/UserDashboard/RefreshHistoryButton';
-import { CalendarCheck, Target, TrendingUp } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import { StatCard } from './StatCard';
 
 export interface UserDashboardProps {
@@ -20,14 +20,6 @@ export function UserDashboard({
   totalSolvedCount,
   currentStreak,
 }: UserDashboardProps) {
-  const router = useRouter();
-
-  const handleLogout = () => {
-    document.cookie = 'accessToken=; path=/; max-age=0;';
-    toast.success('성공적으로 로그아웃 되었습니다.');
-    router.replace('/');
-  };
-
   return (
     <div className='w-full rounded-xl border border-none bg-white p-2 dark:border-gray-700 dark:bg-[var(--background)]'>
       <div className='flex flex-col gap-4'>

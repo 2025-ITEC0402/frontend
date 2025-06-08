@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
+
 import { getCookieValue } from '@/src/shared/lib/cookies';
 import { Chatroom } from '@/src/shared/types/chatroom';
-import { useQuery } from '@tanstack/react-query';
 
 const fetchChatList = async (): Promise<Chatroom[]> => {
   const token = getCookieValue('accessToken');

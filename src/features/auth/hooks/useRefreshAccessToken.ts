@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+
 import { refreshAccessToken } from '../model/refreshAccessToken';
 
 export const useRefreshAccessToken = () => {

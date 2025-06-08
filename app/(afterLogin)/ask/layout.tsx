@@ -1,6 +1,7 @@
-import { AskSidebar } from '@/src/features/ask/ui/AskSidebar';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
+
+import { AskSidebar } from '@/src/features/ask/ui/AskSidebar';
 
 export const metadata: Metadata = {
   title: 'AI 학습 플랫폼 | AI 튜터',
