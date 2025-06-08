@@ -10,10 +10,10 @@ import { toast } from 'sonner';
 export function AITutorChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
+      messageId: '1',
       content: '안녕하세요! 공학수학 학습을 도와드리는 AI 튜터입니다. 어떤 도움이 필요하신가요?',
-      sender: 'ai',
-      timestamp: new Date(),
+      senderType: 'AI',
+      createdAt: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
@@ -36,10 +36,10 @@ export function AITutorChat() {
     }
 
     const newMessage: Message = {
-      id: Date.now().toString(),
+      messageId: Date.now().toString(),
       content: input,
-      sender: 'user',
-      timestamp: new Date(),
+      senderType: 'USER',
+      createdAt: new Date(),
       imageUrl: selectedImage || undefined,
     };
 
@@ -50,10 +50,10 @@ export function AITutorChat() {
 
     setTimeout(() => {
       const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
+        messageId: (Date.now() + 1).toString(),
         content: '죄송합니다. 현재 AI 튜터 기능은 개발 중입니다. 곧 만나요!',
-        sender: 'ai',
-        timestamp: new Date(),
+        senderType: 'AI',
+        createdAt: new Date(),
       };
       setMessages((prev) => [...prev, aiResponse]);
     }, 1000);

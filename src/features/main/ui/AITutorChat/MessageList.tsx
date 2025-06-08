@@ -6,17 +6,17 @@ export function MessageList({ messages }: { messages: Message[] }) {
     <div className='scrollbar-hide mb-4 h-[500px] space-y-4 overflow-y-auto rounded-lg border bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900'>
       {messages.map((msg) => (
         <div
-          key={msg.id}
-          className={`flex items-start gap-2 ${msg.sender === 'user' ? 'justify-end' : ''}`}
+          key={msg.messageId}
+          className={`flex items-start gap-2 ${msg.senderType === 'USER' ? 'justify-end' : ''}`}
         >
-          {msg.sender === 'ai' && (
+          {msg.senderType === 'AI' && (
             <div className='rounded-full bg-blue-100 p-1 dark:bg-blue-900'>
               <Bot className='h-5 w-5 text-blue-600 dark:text-blue-400' />
             </div>
           )}
           <div
             className={`max-w-[80%] rounded-lg p-3 ${
-              msg.sender === 'user'
+              msg.senderType === 'USER'
                 ? 'bg-blue-500 text-white'
                 : 'bg-white dark:bg-gray-800 dark:text-white'
             }`}
@@ -30,7 +30,7 @@ export function MessageList({ messages }: { messages: Message[] }) {
               />
             )}
           </div>
-          {msg.sender === 'user' && (
+          {msg.senderType === 'USER' && (
             <div className='rounded-full bg-gray-100 p-1 dark:bg-gray-700'>
               <User className='h-5 w-5 text-gray-600 dark:text-gray-400' />
             </div>
