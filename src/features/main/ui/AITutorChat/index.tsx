@@ -3,7 +3,7 @@
 import { ChatInput } from '@/src/features/main/ui/AITutorChat/ChatInput';
 import { ImagePreview } from '@/src/features/main/ui/AITutorChat/ImagePreview';
 import { MessageList } from '@/src/features/main/ui/AITutorChat/MessageList';
-import { Message } from '@/src/shared/types/message';
+import { Message } from '@/src/shared/types/chatroom';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
