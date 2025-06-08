@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useFetchChatroomDetail } from '@/src/features/ask/api/useFetchChatroomDetail';
-import { AskChat } from '@/src/features/ask/ui/AskChat';
+import AskChat from '@/src/features/ask/ui/AskChat';
 import { Spinner } from '@/src/shared/ui/spinner';
 import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AskMainPage() {
   const params = useParams();
