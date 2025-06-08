@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest, { params }: { params: { chapterId: number } }) {
+export async function POST(req: NextRequest, context: any) {
+  const { chapterId } = context.params;
   const token = req.headers.get('authorization');
-  const { chapterId } = await params;
 
   if (!token || !token.startsWith('Bearer ')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

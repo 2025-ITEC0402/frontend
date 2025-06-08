@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = await params;
+export async function GET(req: NextRequest, context: any) {
+  const { id } = context.params;
   const token = req.headers.get('authorization');
 
   if (!token || !token.startsWith('Bearer ')) {
@@ -18,14 +18,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     });
 
     if (!response.ok) {
-      throw new Error(`백엔드 응답 실패: ${response.status}`);
+      throw new Error(`Backend responded with status: ${response.status}`);
     }
 
     const data = await response.json();
     return NextResponse.json(data);
-  } 
-  catch (error) {
-    console.error('문제 조회 실패:', error);
-    return NextResponse.json({ error: '서버 오류' }, { status: 500 });
+  } catch (error) {
+    console.error('Failed to fetch question:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

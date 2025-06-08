@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, context: { params: { chatRoomId: string } }) {
+export async function GET(req: NextRequest, context: any) {
   const token = req.headers.get('authorization');
   const { chatRoomId } = context.params;
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, context: { params: { chatRoomId: str
   }
 }
 
-export async function POST(req: NextRequest, context: { params: { chatRoomId: string } }) {
+export async function POST(req: NextRequest, context: any) {
   const token = req.headers.get('authorization');
   const { chatRoomId } = context.params;
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest, context: { params: { chatRoomId: st
   }
 }
 
-export async function PUT(req: NextRequest, context: { params: { chatRoomId: string } }) {
+export async function PUT(req: NextRequest, context: any) {
   const token = req.headers.get('authorization');
   const { chatRoomId } = context.params;
 
@@ -102,7 +102,7 @@ export async function PUT(req: NextRequest, context: { params: { chatRoomId: str
   }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { chatRoomId: string } }) {
+export async function DELETE(req: NextRequest, context: any) {
   const token = req.headers.get('authorization');
   const { chatRoomId } = context.params;
 
