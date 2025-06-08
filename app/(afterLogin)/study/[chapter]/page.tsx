@@ -1,19 +1,21 @@
 'use client';
 
+import { useCompleteChapter } from '@/src/features/study/api/useCompleteChapter';
+import { MarkdownRenderer } from '@/src/features/study/ui/MarkdownRenderer';
 import { chapters } from '@/src/shared/types/chapters';
+import { Button } from '@/src/shared/ui/button';
 import 'katex/dist/katex.min.css';
+import { CheckCircle2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import rehypeKatex from 'rehype-katex';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
+import { toast } from 'sonner';
 
 export default function StudyChapterPage() {
   const params = useParams();
   const currentChapter = params.chapter;
   const [markdown, setMarkdown] = useState('');
   const chapterData = chapters.find((c) => c.chapterId === currentChapter);
+  const completeMutation = useCompleteChapter();
 
   useEffect(() => {
     if (chapterData) {
@@ -27,48 +29,32 @@ export default function StudyChapterPage() {
     }
   }, [chapterData]);
 
+  const handleComplete = () => {
+    if (!chapterData) return;
+    completeMutation.mutate(
+      { chapterId: Number(chapterData.chapterId) },
+      {
+        onSuccess: () => toast.success('학습 완료!'),
+        onError: () => toast.error('학습 완료 처리에 실패했습니다.'),
+      },
+    );
+  };
+
   if (!chapterData) return <div>존재하지 않는 챕터입니다.</div>;
 
   return (
-    <div className='prose dark:prose-invert prose-p:my-4 prose-li:my-2 prose-h2:mt-8 prose-h3:mt-6 prose-h4:mt-4 prose-h1:mt-0 mx-auto max-w-4xl p-8 [&_h1:not(:first-of-type)]:mt-12'>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
-        components={{
-          h1: ({ children }) => <h1 className='mb-8 text-3xl font-extrabold'>{children}</h1>,
-          h2: ({ children }) => (
-            <h2 className='mb-3 text-lg font-bold text-blue-600 dark:text-blue-400'>{children}</h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className='mt-5 mb-2 text-base font-semibold text-gray-800 dark:text-gray-300'>
-              {children}
-            </h3>
-          ),
-          h4: ({ children }) => (
-            <h4 className='mt-4 mb-1 text-sm font-medium text-gray-600 dark:text-gray-400'>
-              {children}
-            </h4>
-          ),
-          p: ({ children }) => (
-            <p className='mb-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300'>
-              {children}
-            </p>
-          ),
-          ul: ({ children }) => (
-            <ul className='mb-3 list-disc space-y-1 pl-5 text-sm text-gray-700 dark:text-gray-300'>
-              {children}
-            </ul>
-          ),
-          li: ({ children }) => <li className='leading-relaxed'>{children}</li>,
-          blockquote: ({ children }) => (
-            <blockquote className='my-4 border-l-4 border-blue-400 pl-4 text-sm text-gray-600 italic dark:text-gray-400'>
-              {children}
-            </blockquote>
-          ),
-        }}
-      >
-        {markdown}
-      </ReactMarkdown>
+    <div className='relative mx-auto max-w-4xl p-8'>
+      <div className='fixed right-8 bottom-8 z-50'>
+        <Button
+          onClick={handleComplete}
+          disabled={completeMutation.isPending}
+          className='flex items-center gap-2 rounded-full border border-blue-400 bg-white/90 px-6 py-3 text-base font-semibold text-blue-600 shadow-md ring-1 ring-blue-100 backdrop-blur transition-all hover:scale-105 hover:bg-blue-50 hover:shadow-lg active:scale-100 dark:bg-neutral-900/90 dark:text-blue-300 dark:ring-blue-900 dark:hover:bg-blue-950'
+        >
+          <CheckCircle2 className='h-5 w-5 text-blue-400 dark:text-blue-300' />
+          {completeMutation.isPending ? '처리 중...' : '학습 완료'}
+        </Button>
+      </div>
+      <MarkdownRenderer content={markdown} />
     </div>
   );
 }
