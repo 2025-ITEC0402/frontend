@@ -23,5 +23,5 @@ export default function PracticeByIdPage() {
     return <div className='text-red-500'>문제를 불러오는 데 실패했습니다.</div>;
   }
 
-  return <ProblemSolver problem={data} hideNavigation={true} />;
+  return <ProblemSolver problem={data} hideNavigation={true} correctCount={0} totalCount={0} />;
 }
