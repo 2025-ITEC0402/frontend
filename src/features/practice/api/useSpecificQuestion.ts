@@ -1,8 +1,8 @@
 import { getCookieValue } from '@/src/shared/lib/cookies';
-import { Question } from '@/src/shared/types/problem';
+import { Problem } from '@/src/shared/types/problem';
 import { useQuery } from '@tanstack/react-query';
 
-const fetchQuestion = async (id: number): Promise<Question> => {
+const fetchQuestion = async (id: number): Promise<Problem> => {
   const token = getCookieValue('accessToken');
 
   if (!token) {
@@ -24,7 +24,7 @@ const fetchQuestion = async (id: number): Promise<Question> => {
 };
 
 export function useSpecificQuestion(id: number) {
-  return useQuery<Question>({
+  return useQuery<Problem>({
     queryKey: ['question', id],
     queryFn: () => fetchQuestion(id),
     enabled: !!id,
