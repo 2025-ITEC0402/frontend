@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { cn } from '@/src/shared/lib/utils';
 import { ProblemViewProps } from '@/src/shared/types/problem';
 import { Button } from '@/src/shared/ui/button';
+import { MathRenderer } from '@/src/shared/ui/MathRenderer';
 
 interface Props {
   problem: ProblemViewProps;
@@ -32,7 +33,6 @@ export function ProblemView({
   hideNavigation = false,
 }: Props) {
   const correctIndex = problem.answer - 1;
-
   const isCorrect = selected === correctIndex;
 
   const answerLetter = useMemo(() => String.fromCharCode(65 + correctIndex), [correctIndex]);
@@ -40,7 +40,7 @@ export function ProblemView({
   return (
     <div className='flex min-h-[700px] flex-col justify-between p-12'>
       <div className='mb-4 text-lg font-bold'>
-        {problem.questionId}. {problem.title}
+        <MathRenderer content={`${problem.questionId}. ${problem.title}`} />
       </div>
 
       <div className='mb-6 space-y-3'>
@@ -70,14 +70,13 @@ export function ProblemView({
                 className='h-5 w-5 accent-blue-600'
               />
               <span className='text-base font-medium'>
-                {String.fromCharCode(65 + idx)}. {choice}
+                <MathRenderer content={`${String.fromCharCode(65 + idx)}. ${choice}`} />
               </span>
             </label>
           );
         })}
       </div>
 
-      {/* 정답 확인 버튼 */}
       <div className='flex items-center gap-2'>
         <Button
           onClick={onCheck}
@@ -99,7 +98,7 @@ export function ProblemView({
               : 'bg-muted text-muted-foreground blur-sm select-none',
           )}
         >
-          정답: {answerLetter}. {problem.choices[correctIndex]}
+          <MathRenderer content={`정답: ${answerLetter}. ${problem.choices[correctIndex]}`} />
         </span>
       </div>
 
